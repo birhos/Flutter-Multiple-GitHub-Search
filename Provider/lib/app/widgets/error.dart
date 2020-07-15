@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class SearchEmptyWidget extends StatelessWidget {
-  SearchEmptyWidget();
+class SearchErrorWidget extends StatelessWidget {
+  const SearchErrorWidget({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -9,17 +9,16 @@ class SearchEmptyWidget extends StatelessWidget {
       alignment: FractionalOffset.center,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Icon(
-            Icons.warning,
-            color: Colors.yellow[200],
-            size: 80.0,
-          ),
+          Icon(Icons.error_outline, color: Colors.red[300], size: 80.0),
           Container(
             padding: EdgeInsets.only(top: 16.0),
             child: Text(
-              "No results",
-              style: TextStyle(color: Colors.yellow[100]),
+              "Rate limit exceeded",
+              style: TextStyle(
+                color: Colors.red[300],
+              ),
             ),
           )
         ],

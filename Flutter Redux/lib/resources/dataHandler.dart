@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
-import 'package:example/changeNotifiers/search/searchResult.dart';
+import 'package:example/redux/search/searchResult.dart';
 
 final http.Client httpClient = http.Client();
 

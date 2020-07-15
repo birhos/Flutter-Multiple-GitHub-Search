@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SearchEmptyWidget extends StatelessWidget {
-  const SearchEmptyWidget({Key key}) : super(key: key);
+  SearchEmptyWidget();
 
   @override
   Widget build(BuildContext context) {

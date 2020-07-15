@@ -1,82 +1,60 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
-import 'package:example/app/widgets/empty.dart';
 import 'package:example/app/widgets/error.dart';
+import 'package:example/app/widgets/empty.dart';
 import 'package:example/app/widgets/loaded.dart';
-import 'package:example/app/widgets/loading.dart';
 import 'package:example/app/widgets/initial.dart';
-import 'package:example/changeNotifiers/search/search.dart';
-import 'package:example/changeNotifiers/search/searchState.dart';
-import 'package:example/changeNotifiers/search/searchEvent.dart';
+import 'package:example/app/widgets/loading.dart';
+import 'package:example/redux/search/searchState.dart';
+import 'package:example/redux/search/searchAction.dart';
 
-class SearchPage extends StatefulWidget {
-  @override
-  _SearchPageState createState() => _SearchPageState();
+class _SearchPageModel {
+  final SearchState currentState;
+  final void Function(String term) fetched;
+  final void Function() stateReset;
+
+  _SearchPageModel({this.currentState, this.fetched, this.stateReset});
 }
 
-class _SearchPageState extends State<SearchPage> {
-  SearchChangeNotifier _gitHubViewModel;
-
-  @override
-  void initState() {
-    super.initState();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _gitHubViewModel =
-          Provider.of<SearchChangeNotifier>(context, listen: false);
-    });
-  }
-
-  @override
-  void dispose() {
-    _gitHubViewModel?.dispose();
-
-    super.dispose();
-  }
+class SearchPage extends StatelessWidget {
+  const SearchPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<SearchChangeNotifier>(
-      builder:
-          (BuildContext context, SearchChangeNotifier model, Widget child) {
-        final SearchState state = model.state;
-
+    return StoreConnector<SearchState, _SearchPageModel>(
+      converter: (store) {
+        return _SearchPageModel(
+          currentState: store.state,
+          fetched: (String term) => store.dispatch(SearchFetched(term: term)),
+          stateReset: () => store.dispatch(SearchStateReset()),
+        );
+      },
+      builder: (BuildContext context, _SearchPageModel viewModel) {
         return Scaffold(
-          body: Stack(
-            fit: StackFit.expand,
+          body: Flex(
+            direction: Axis.vertical,
             children: <Widget>[
-              Flex(
-                direction: Axis.vertical,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 4.0),
-                    child: TextField(
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Search Github...',
-                      ),
-                      style: TextStyle(
-                        fontSize: 36.0,
-                        fontFamily: "Hind",
-                        decoration: TextDecoration.none,
-                      ),
-                      onChanged: (String icerik) {
-                        _gitHubViewModel.mapEventToState(
-                          SearchFetched(
-                            term: icerik,
-                          ),
-                        );
-                      },
-                    ),
+              Container(
+                padding: EdgeInsets.fromLTRB(16.0, 24.0, 16.0, 4.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: 'Search Github...',
                   ),
-                  Expanded(
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 500),
-                      child: _buildWidget(state),
-                    ),
-                  )
-                ],
+                  style: TextStyle(
+                    fontSize: 36.0,
+                    fontFamily: "Hind",
+                    decoration: TextDecoration.none,
+                  ),
+                  onChanged: viewModel.fetched,
+                ),
+              ),
+              Expanded(
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 500),
+                  child: _buildWidget(viewModel.currentState),
+                ),
               ),
             ],
           ),
@@ -95,7 +73,7 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               onPressed: () {
-                _gitHubViewModel.mapEventToState(SearchStateReset());
+                viewModel.stateReset();
               },
             ),
           ),
@@ -117,6 +95,6 @@ class _SearchPageState extends State<SearchPage> {
       return SearchErrorWidget();
     }
 
-    throw Exception('${state.runtimeType} is not supported');
+    throw Exception('${state.runtimeType} is not supported.');
   }
 }

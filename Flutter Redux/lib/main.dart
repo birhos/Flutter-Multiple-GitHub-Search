@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 import 'package:example/locator.dart';
 import 'package:example/app/searchPage.dart';
-import 'package:example/changeNotifiers/search/search.dart';
+import 'package:example/redux/search/searchState.dart';
+import 'package:example/redux/search/searchStore.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,12 +12,8 @@ void main() {
   setupLocator();
 
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider<SearchChangeNotifier>(
-          create: (_) => SearchChangeNotifier(),
-        ),
-      ],
+    StoreProvider<SearchState>(
+      store: searchStore,
       child: MyApp(),
     ),
   );
@@ -27,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Provider - Github Search',
+      title: 'Redux - Github Search',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.grey,
