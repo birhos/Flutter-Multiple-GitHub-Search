@@ -6,35 +6,41 @@ part of 'searchStore.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$SearchStore on _SearchStore, Store {
-  final _$stateAtom = Atom(name: '_AramaStore.state');
+  final _$stateAtom = Atom(name: '_SearchStore.state');
 
   @override
   SearchState get state {
-    _$stateAtom.context.enforceReadPolicy(_$stateAtom);
-    _$stateAtom.reportObserved();
+    _$stateAtom.reportRead();
     return super.state;
   }
 
   @override
   set state(SearchState value) {
-    _$stateAtom.context.conditionallyRunInAction(() {
+    _$stateAtom.reportWrite(value, super.state, () {
       super.state = value;
-      _$stateAtom.reportChanged();
-    }, _$stateAtom, name: '${_$stateAtom.name}_set');
+    });
   }
 
-  final _$_AramaStoreActionController = ActionController(name: '_AramaStore');
+  final _$_SearchStoreActionController = ActionController(name: '_SearchStore');
 
   @override
   void mapEventToState(SearchEvent event) {
-    final _$actionInfo = _$_AramaStoreActionController.startAction();
+    final _$actionInfo = _$_SearchStoreActionController.startAction(
+        name: '_SearchStore.mapEventToState');
     try {
       return super.mapEventToState(event);
     } finally {
-      _$_AramaStoreActionController.endAction(_$actionInfo);
+      _$_SearchStoreActionController.endAction(_$actionInfo);
     }
+  }
+
+  @override
+  String toString() {
+    return '''
+state: ${state}
+    ''';
   }
 }
