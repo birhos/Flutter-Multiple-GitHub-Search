@@ -1,0 +1,21 @@
+name: common
+description: A new Flutter package project.
+version: 0.0.1
+author:
+homepage: s
+
+environment:
+  sdk: ">=2.12.2 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^0.13.1
+  equatable: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:

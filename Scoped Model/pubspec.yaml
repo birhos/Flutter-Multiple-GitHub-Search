@@ -1,0 +1,36 @@
+name: example
+description: A new Flutter project.
+
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.12.2 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  common:
+    path: ../common
+
+  cupertino_icons: ^1.0.2
+  scoped_model: ^2.0.0-nullsafety.0
+  get_it: ^6.1.1
+  equatable: ^2.0.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+
+  fonts:
+    - family: Montserrat
+      fonts:
+        - asset: fonts/montserrat/Montserrat-Bold.ttf
+        - asset: fonts/montserrat/Montserrat-Regular.ttf
+    - family: Hind
+      fonts:
+        - asset: fonts/hind/Hind-Regular.ttf
